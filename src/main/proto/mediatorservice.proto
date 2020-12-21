@@ -1,0 +1,94 @@
+syntax = "proto3";
+package com.example.demo;
+import "google/protobuf/empty.proto";
+option java_multiple_files = true;
+
+message PersonRoleByIdRequest{
+  string id = 1;
+}
+
+message PersonRoleResponse{
+  string id = 1;
+  string roleName = 2;
+}
+
+message PersonRoleListResponse{
+  repeated PersonRoleResponse roles = 1;
+}
+
+message PersonRoleAddRequest{
+  string roleName = 1;
+}
+
+message PersonRoleChangeRequest{
+  string id = 1;
+  string roleName = 2;
+}
+
+service PersonRoleService{
+  rpc getPersonRoleById(PersonRoleByIdRequest) returns (PersonRoleResponse);
+  rpc getPersonRoles(google.protobuf.Empty) returns (PersonRoleListResponse);
+  rpc changePersonRoleById(PersonRoleChangeRequest) returns (PersonRoleResponse);
+  rpc deletePersonRoleById(PersonRoleByIdRequest) returns (google.protobuf.Empty);
+  rpc addPersonRole(PersonRoleAddRequest) returns (PersonRoleResponse);
+}
+
+message CargoTypeByIdRequest{
+  string id = 1;
+}
+
+message CargoTypeResponse{
+  string id = 1;
+  string cargoTypeName = 2;
+}
+
+message CargoTypeChangeRequest{
+  string id = 1;
+  string cargoTypeName = 2;
+}
+
+message CargoTypeListResponse{
+  repeated CargoTypeResponse cargoTypeList = 1;
+}
+
+message CargoTypeAddRequest{
+  string cargoTypeName = 1;
+}
+
+service CargoTypeService{
+  rpc getCargoTypeById(CargoTypeByIdRequest) returns (CargoTypeResponse);
+  rpc getCargoTypes(google.protobuf.Empty) returns (CargoTypeListResponse);
+  rpc changeCargoTypeById(CargoTypeChangeRequest) returns (CargoTypeResponse);
+  rpc deleteCargoTypeById(CargoTypeByIdRequest) returns (google.protobuf.Empty);
+  rpc addCargoType(CargoTypeAddRequest) returns (CargoTypeResponse);
+}
+
+message MachineryTypeByIdRequest{
+  string id = 1;
+}
+
+message MachineryTypeResponse{
+  string id = 1;
+  string machineryTypeName = 2;
+}
+
+message MachineryTypeListResponse{
+  repeated MachineryTypeResponse machineryTypeList = 1;
+}
+
+message MachineryTypeChangeRequest{
+  string id = 1;
+  string machineryTypeName = 2;
+}
+
+message MachineryTypeAddRequest{
+  string machineryTypeName = 1;
+}
+
+service MachineryTypeService{
+  rpc getMachineryTypeById(MachineryTypeByIdRequest) returns (MachineryTypeResponse);
+  rpc getMachineryTypes(google.protobuf.Empty) returns (MachineryTypeListResponse);
+  rpc changeMachineryTypeById(MachineryTypeChangeRequest) returns (MachineryTypeResponse);
+  rpc deleteMachineryTypeById(MachineryTypeByIdRequest) returns (google.protobuf.Empty);
+  rpc addMachineryType(MachineryTypeAddRequest) returns (MachineryTypeResponse);
+}
