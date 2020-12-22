@@ -3,6 +3,7 @@ package kpi.trspo.mediator.services.impl;
 import kpi.trspo.mediator.services.interfaces.CargoTypeService;
 import kpi.trspo.mediator.services.model.CargoType;
 import lombok.AllArgsConstructor;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -23,9 +24,10 @@ public class CargoTypeServiceImpl implements CargoTypeService {
         restTemplate.delete(workingURL);
     }
 
-    public CargoType create(CargoType addedCargoType){
+    @RabbitListener(queues = "cargoTypeQueue")
+    public void create(CargoType addedCargoType){
         HttpEntity<CargoType> request = new HttpEntity<>(addedCargoType);
-        return restTemplate.postForObject(URL,request,CargoType.class);
+        restTemplate.postForObject(URL,request,CargoType.class);
     }
 
     public List<CargoType> getAll(){

@@ -2,6 +2,7 @@ package kpi.trspo.mediator.api.controller;
 
 import kpi.trspo.mediator.services.interfaces.CargoTypeService;
 import kpi.trspo.mediator.services.model.CargoType;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,9 @@ public final class CargoTypeController {
         this.cargoTypeService = cargoTypeService;
     }
 
+    @Autowired
+    RabbitTemplate rabbitTemplate;
+
     @GetMapping
     public List<CargoType> getCargoType(){ return  cargoTypeService.getAll();}
 
@@ -30,9 +34,9 @@ public final class CargoTypeController {
     }
 
     @PostMapping
-    public CargoType addCargoType(@RequestBody CargoType addedCargoType)
+    public void addCargoType(@RequestBody CargoType addedCargoType)
     {
-        return cargoTypeService.create(addedCargoType);
+        rabbitTemplate.convertAndSend("direct-exchange","cargoType",addedCargoType);
     }
 
     @PutMapping(path = "{id}")

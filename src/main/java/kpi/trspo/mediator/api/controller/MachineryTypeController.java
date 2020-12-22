@@ -2,6 +2,7 @@ package kpi.trspo.mediator.api.controller;
 
 import kpi.trspo.mediator.services.interfaces.MachineryTypeService;
 import kpi.trspo.mediator.services.model.MachineryType;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,9 @@ public class MachineryTypeController {
         this.machineryTypeService = machineryTypeService;
     }
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
     @GetMapping
     public List<MachineryType> getMachineryType(){ return machineryTypeService.getAll();}
 
@@ -28,9 +32,9 @@ public class MachineryTypeController {
     }
 
     @PostMapping
-    public MachineryType addMachineryType(@RequestBody MachineryType addedMachineryType)
+    public void addMachineryType(@RequestBody MachineryType addedMachineryType)
     {
-        return machineryTypeService.create(addedMachineryType);
+        rabbitTemplate.convertAndSend("direct-exchange","machineryType",addedMachineryType);
     }
 
     @PutMapping(path = "{id}")

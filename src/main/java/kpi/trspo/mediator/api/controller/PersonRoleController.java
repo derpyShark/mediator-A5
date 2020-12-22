@@ -2,6 +2,7 @@ package kpi.trspo.mediator.api.controller;
 
 import kpi.trspo.mediator.services.interfaces.PersonRoleService;
 import kpi.trspo.mediator.services.model.PersonRole;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,9 @@ public class PersonRoleController {
         this.personRoleService = personRoleService;
     }
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
     @GetMapping
     public List<PersonRole> getPersonRole(){ return personRoleService.getAll();}
 
@@ -28,9 +32,9 @@ public class PersonRoleController {
     }
 
     @PostMapping
-    public PersonRole addPersonRole(@RequestBody PersonRole addedPersonRole)
+    public void addPersonRole(@RequestBody PersonRole addedPersonRole)
     {
-        return personRoleService.create(addedPersonRole);
+        rabbitTemplate.convertAndSend("direct-exchange","personRole",addedPersonRole);
     }
 
     @PutMapping(path = "{id}")

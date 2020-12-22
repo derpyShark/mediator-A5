@@ -3,6 +3,7 @@ package kpi.trspo.mediator.services.impl;
 import kpi.trspo.mediator.services.interfaces.PersonRoleService;
 import kpi.trspo.mediator.services.model.PersonRole;
 import lombok.AllArgsConstructor;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -23,9 +24,10 @@ public class PersonRoleServiceImpl implements PersonRoleService {
         restTemplate.delete(workingURL);
     }
 
-    public PersonRole create(PersonRole addedPerson){
+    @RabbitListener(queues = "personRoleQueue")
+    public void create(PersonRole addedPerson){
         HttpEntity<PersonRole> request = new HttpEntity<>(addedPerson);
-        return restTemplate.postForObject(URL,request, PersonRole.class);
+        restTemplate.postForObject(URL,request, PersonRole.class);
     }
 
     public List<PersonRole> getAll(){

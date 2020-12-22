@@ -3,6 +3,7 @@ package kpi.trspo.mediator.services.impl;
 import kpi.trspo.mediator.services.interfaces.MachineryTypeService;
 import kpi.trspo.mediator.services.model.MachineryType;
 import lombok.AllArgsConstructor;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -22,9 +23,10 @@ public class MachineryTypeServiceImpl implements MachineryTypeService {
         restTemplate.delete(workingURL);
     }
 
-    public MachineryType create(MachineryType addedMachineryType){
+    @RabbitListener(queues = "machineryTypeQueue")
+    public void create(MachineryType addedMachineryType){
         HttpEntity<MachineryType> request = new HttpEntity<>(addedMachineryType);
-        return restTemplate.postForObject(URL,request,MachineryType.class);
+        restTemplate.postForObject(URL,request,MachineryType.class);
     }
 
     public List<MachineryType> getAll(){

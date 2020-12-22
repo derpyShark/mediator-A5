@@ -9,7 +9,7 @@ import java.util.UUID;
 public interface CargoTypeService {
     List<CargoType> getAll();
     CargoType getById(UUID cargoTypeId);
-    CargoType create(CargoType cargoTypeObject);
+    void create(CargoType cargoTypeObject);
     CargoType update(UUID cargoTypeId, CargoType cargoTypeDetails);
     void delete(UUID cargoTypeId);
 }
